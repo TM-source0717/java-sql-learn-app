@@ -14,13 +14,15 @@ public class SQLLearnViewModel {
     // Viewで監視しているユーザーリストとバインドするための変数
     private final ObservableList<String> userList = FXCollections.observableArrayList();
 
+    private final ObservableList<String> m_dept_list = FXCollections.observableArrayList();
+
     /**
      * コンストラクタ
      */
     public SQLLearnViewModel(SQLLearnIF sql_learn_if) {
         this.m_sql_learn_if = sql_learn_if;
 
-        this.refreshUserList();
+        m_dept_list.setAll(m_sql_learn_if.getAllDepartments());
     }
 
     /**
@@ -31,14 +33,34 @@ public class SQLLearnViewModel {
     }
 
     /**
+     * 部署名取得関数
+     */
+    public ObservableList<String> getDepartmentList() { return m_dept_list; }
+
+    /**
+     * ユーザーリスト取得（部署フィルター）
+     */
+    public void getUserBySearchDepartmentId(String name) {
+        List<String> search_item = new ArrayList<>();
+        if (name == null) {
+            return;
+        }
+
+        search_item = this.m_sql_learn_if.getUserBySearchDepartmentId(name);
+
+        this.userList.clear();
+        this.userList.addAll(search_item);
+    }
+
+    /**
      * ユーザーリスト更新関数
      */
-    public void refreshUserList() {
+    public void refreshUserList(String department_name) {
         // 現在の画面連動リストを空っぽにする
         this.userList.clear();
 
         // Modelから現在のDB内のデータを取得
-        List<String> db_users = this.m_sql_learn_if.GetAllUserList();
+        List<String> db_users = this.m_sql_learn_if.getUserBySearchDepartmentId(department_name);
         //　ユーザーリストを更新
         this.userList.addAll(db_users);
     }
@@ -46,12 +68,11 @@ public class SQLLearnViewModel {
     /**
      * ユーザー登録処理
      */
-    public void registerUser(String name) {
+    public void registerUser(String name,String department_name) {
         if (name == null || name.trim().isEmpty()) return;
+        if (department_name == null || department_name.trim().isEmpty()) return;
 
-        this.m_sql_learn_if.insertUser(name);
-
-        this.refreshUserList();
+        this.m_sql_learn_if.insertUser(name,department_name);
     }
 
     /**
@@ -61,23 +82,20 @@ public class SQLLearnViewModel {
         if (name == null) return;
 
         this.m_sql_learn_if.deleteUser(name);
-
-        this.refreshUserList();
     }
 
     /**
      * 検索機能
      */
-    public void searchItem(String name) {
+    public void searchItem(String name,String department_name) {
         List<String> search_item = new ArrayList<>();
         if (name == null) {
             return;
         }
 
-        search_item = this.m_sql_learn_if.searchItem(name);
+        search_item = this.m_sql_learn_if.searchItem(name,department_name);
 
         this.userList.clear();
         this.userList.addAll(search_item);
     }
-
 }

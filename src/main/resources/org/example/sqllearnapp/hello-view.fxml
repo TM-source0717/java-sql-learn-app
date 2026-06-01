@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -9,11 +10,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox prefHeight="500.0" prefWidth="800.0" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sqllearnapp.View.SQLLearnView">
+<HBox prefHeight="500.0" prefWidth="950.0" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sqllearnapp.View.SQLLearnView">
     <padding>
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
     </padding>
     <children>
+        <VBox prefWidth="180.0" spacing="10.0">
+            <children>
+                <Label text="部署フィルター">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <ListView fx:id="m_dept_list_view" VBox.vgrow="ALWAYS" />
+            </children>
+        </VBox>
+
         <VBox spacing="10.0" HBox.hgrow="ALWAYS">
             <children>
                 <Label text="ユーザー管理システム">
@@ -29,6 +41,7 @@
                 <HBox spacing="10.0">
                     <children>
                         <TextField fx:id="m_input_text" promptText="新規ユーザー名を入力" HBox.hgrow="ALWAYS" />
+                        <ComboBox fx:id="m_dept_combo_box" prefWidth="120.0" promptText="部署を選択" />
                         <Button fx:id="m_register_button" mnemonicParsing="false" onAction="#onRegisterButtonClick" disable="true" text="登録" />
                     </children>
                 </HBox>
