@@ -25,6 +25,9 @@ public class SQLLearnView {
     private Label m_selected_name_label;
 
     @FXML
+    private Button m_register_button;
+
+    @FXML
     private Button m_delete_button;
 
     private final SQLLearnViewModel m_search_learn_vm;
@@ -45,18 +48,22 @@ public class SQLLearnView {
         m_user_list_view.setItems(m_search_learn_vm.getUserList());
 
         // 検索テキスト入力イベントをリアルタイムに監視
-        m_search_text.textProperty().addListener((observable, oldValue, newValue) -> {
-            m_search_learn_vm.searchItem(newValue);
+        // 新規入力テキストを監視し、空文字なら登録ボタンを無効化
+        m_input_text.textProperty().addListener((observable, oldValue, newValue) -> {
+            // トリム（前後の空白除去）した結果が空、またはnullならボタンを無効化
+            boolean isInvalid = (newValue == null || newValue.trim().isEmpty());
+            m_register_button.setDisable(isInvalid);
         });
 
-        // リストの選択変更イベントをリアルタイムに監視（新規追加）
+        // リストの選択変更イベントを監視し、詳細表示と削除ボタンを制御
+        // 選択されているアイテムがないときは、Deleteボタンを非活性
         m_user_list_view.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // 行が選択されたら、その名前をラベルにセット
                 m_selected_name_label.setText(newSelection);
+                m_delete_button.setDisable(false);
             } else {
-                // 選択が解除されたら初期状態に戻す
                 m_selected_name_label.setText("選択されていません");
+                m_delete_button.setDisable(true);
             }
         });
     }
