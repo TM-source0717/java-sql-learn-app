@@ -1,6 +1,8 @@
 package org.example.sqllearnapp.View;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import org.example.sqllearnapp.ViewModel.SQLLearnViewModel;
@@ -19,13 +21,19 @@ public class SQLLearnView {
     @FXML
     private TextField m_search_text;
 
+    @FXML
+    private Label m_selected_name_label;
+
+    @FXML
+    private Button m_delete_button;
+
     private final SQLLearnViewModel m_search_learn_vm;
 
     /**
      * コンストラクタ
      */
-    public SQLLearnView(SQLLearnViewModel serach_learn_vm) {
-        this.m_search_learn_vm = serach_learn_vm;
+    public SQLLearnView(SQLLearnViewModel search_learn_vm) {
+        this.m_search_learn_vm = search_learn_vm;
     }
 
     /**
@@ -38,8 +46,18 @@ public class SQLLearnView {
 
         // 検索テキスト入力イベントをリアルタイムに監視
         m_search_text.textProperty().addListener((observable, oldValue, newValue) -> {
-            // 文字が1文字変わるたびに、ViewModelの検索ロジックを呼び出す
             m_search_learn_vm.searchItem(newValue);
+        });
+
+        // リストの選択変更イベントをリアルタイムに監視（新規追加）
+        m_user_list_view.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                // 行が選択されたら、その名前をラベルにセット
+                m_selected_name_label.setText(newSelection);
+            } else {
+                // 選択が解除されたら初期状態に戻す
+                m_selected_name_label.setText("選択されていません");
+            }
         });
     }
 

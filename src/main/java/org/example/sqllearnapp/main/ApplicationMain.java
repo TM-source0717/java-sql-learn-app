@@ -34,8 +34,8 @@ public class ApplicationMain extends Application {
             }
         });
 
-        Scene scene = new Scene(fxmlLoader.load(), 320, 340);
-        stage.setTitle("SQL Learning App - MVVM");
+        Scene scene = new Scene(fxmlLoader.load(), 800, 500);
+        stage.setTitle("SQL Learning App");
         stage.setScene(scene);
         stage.show();
     }
