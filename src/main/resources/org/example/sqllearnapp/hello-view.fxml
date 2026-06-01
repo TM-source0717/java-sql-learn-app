@@ -29,7 +29,7 @@
                 <HBox spacing="10.0">
                     <children>
                         <TextField fx:id="m_input_text" promptText="新規ユーザー名を入力" HBox.hgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" onAction="#onRegisterButtonClick" text="登録" />
+                        <Button fx:id="m_register_button" mnemonicParsing="false" onAction="#onRegisterButtonClick" disable="true" text="登録" />
                     </children>
                 </HBox>
                 <ListView fx:id="m_user_list_view" VBox.vgrow="ALWAYS" />
@@ -56,7 +56,7 @@
                         </Label>
                     </children>
                 </VBox>
-                <Button fx:id="m_delete_button" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onDeleteButtonClick" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;" text="このユーザーを削除" />
+                <Button fx:id="m_delete_button" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onDeleteButtonClick" disable="true" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;" text="このユーザーを削除" />
             </children>
         </VBox>
     </children>
