@@ -4,10 +4,11 @@ JavaとSQLを勉強するための、簡易GUIアプリケーションリポジ�
 
 に実装コードを格納
 
-GUI(fxml): JavaFX (OpenJFX)
+-----------------------------
+GUI(fxml)： JavaFX (OpenJFX)
 
-View,ViewModel,Model: Java
+View,ViewModel,Model： Java
 
-DB: SQLite (JDBC)
+DB： SQLite (JDBC)
 
-アーキテクチャ: MVVM
+アーキテクチャ： MVVM
