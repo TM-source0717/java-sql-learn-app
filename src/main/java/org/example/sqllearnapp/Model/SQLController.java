@@ -31,6 +31,7 @@ public class SQLController {
                 + " id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + " name TEXT NOT NULL,"
                 + " department_id INTEGER,"
+                + " role TEXT DEFAULT '一般',"
                 + " FOREIGN KEY (department_id) REFERENCES departments(id)"
                 + ");";
 
@@ -80,46 +81,47 @@ public class SQLController {
     /**
      * データ取得(部署フィルター済み)
      */
-    public List<String> getUserBySearchDepartmentId(String department_name) {
-        List<String> users_list = new ArrayList<>();
-
+    public List<UserRecord> getUsersByDepartment(String department_name) {
+        List<UserRecord> users_list = new ArrayList<>();
         int department_id = this.getDepartmentIdByName(department_name);
-
-        String sql = "SELECT * FROM users WHERE department_id = ?";
+        // name に加えて role も取得するように変更
+        String sql = "SELECT id, name, role FROM users WHERE department_id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, department_id);
             ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next())
-            {
-                users_list.add(rs.getString("name"));
+            while (rs.next()) {
+                // UserRecordクラスにid, name, roleを渡すコンストラクタがあると便利です
+                users_list.add(new UserRecord(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        department_name, // 部署名
+                        rs.getString("role") // DBから実際の役割を取得
+                ));
             }
         } catch (SQLException e) {
-            System.out.println("データ追加エラー: " + e.getMessage());
+            System.out.println("データ取得エラー: " + e.getMessage());
         }
-
-        return  users_list;
+        return users_list;
     }
 
     /**
      * データを追加する (INSERT)
      */
-    public void insertUser(String name, String department_name) {
+    public void insertUser(String name, String department_name, String role) { // roleを追加
         int department_id = this.getDepartmentIdByName(department_name);
 
-        // 入力文字が可変のため、先に条件のみを設定したのちに、対象のテキストを設定する
-        // 入力が自由なので、意図せずSQL構文のテキストが入力されてもDB操作を行わないようにする
-        String sql = "INSERT INTO users(name,department_id) VALUES(?,?)";
+        // SQLのINSERT文に role カラムを追加
+        String sql = "INSERT INTO users(name, department_id, role) VALUES(?,?,?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            // プレースホルダーの指定
             pstmt.setString(1, name);
             pstmt.setInt(2, department_id);
+            pstmt.setString(3, role); // 権限を保存
             pstmt.executeUpdate();
-
         } catch (SQLException e) {
             System.out.println("データ追加エラー: " + e.getMessage());
         }
@@ -144,26 +146,27 @@ public class SQLController {
     /**
      * 検索機能
      */
-    public List<String> searchItem(String name,String department_name) {
-        List<String> search_list = new ArrayList<>();
-
+    // SQLController.java
+    public List<UserRecord> searchItem(String name, String department_name) {
+        List<UserRecord> search_list = new ArrayList<>();
         int department_id = this.getDepartmentIdByName(department_name);
 
-        // 入力文字が可変のため、先に条件のみを設定したのちに、対象のテキストを設定する
-        // 入力が自由なので、意図せずSQL構文のテキストが入力されてもDB操作を行わないようにする
-        String sql = "SELECT * FROM users WHERE name LIKE ? AND department_id = ?";
+        String sql = "SELECT id, name, role FROM users WHERE name LIKE ? AND department_id = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            // プレースホルダーの指定
-            // 部分一致なので、"%"を使用
             pstmt.setString(1, "%" + name + "%");
             pstmt.setInt(2, department_id);
             ResultSet rs = pstmt.executeQuery();
 
-            // 検索に該当したすべてのデータから、nameテーブルのみを抜き出す。
             while (rs.next()) {
-                search_list.add(rs.getString("name"));
+                // UserRecord にデータを詰める
+                search_list.add(new UserRecord(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        department_name,
+                        rs.getString("role")
+                ));
             }
         } catch (SQLException e) {
             System.out.println("検索エラー: " + e.getMessage());
@@ -189,6 +192,36 @@ public class SQLController {
             System.out.println("部署取得エラー: " + e.getMessage());
         }
         return depts;
+    }
+
+    /**
+     * DBから全ユーザー情報を詳細付きで取得する
+     */
+    public List<UserRecord> getAllUsersWithDetails() {
+        List<UserRecord> list = new ArrayList<>();
+
+        // JOINを使って、usersのdepartment_idとdepartmentsのidを紐付ける
+        String sql = "SELECT u.id, u.name, d.name AS dept_name, u.role " +
+                "FROM users u " +
+                "JOIN departments d ON u.department_id = d.id";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                UserRecord record = new UserRecord(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("dept_name"),
+                        rs.getString("role")
+                );
+                list.add(record);
+            }
+        } catch (SQLException e) {
+            System.out.println("詳細取得エラー: " + e.getMessage());
+        }
+        return list;
     }
 
     /**

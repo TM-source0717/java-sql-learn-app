@@ -10,19 +10,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox prefHeight="500.0" prefWidth="950.0" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sqllearnapp.View.SQLLearnView">
+<HBox prefHeight="500.0" prefWidth="950.0" spacing="15.0" xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sqllearnapp.View.SQLLearnView">
     <padding>
-        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
     </padding>
     <children>
         <VBox prefWidth="180.0" spacing="10.0">
             <children>
                 <Label text="部署フィルター">
                     <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font name="System Bold" size="14.0"/>
                     </font>
                 </Label>
-                <ListView fx:id="m_dept_list_view" VBox.vgrow="ALWAYS" />
+                <ListView fx:id="m_dept_list_view" VBox.vgrow="ALWAYS"/>
             </children>
         </VBox>
 
@@ -30,46 +31,51 @@
             <children>
                 <Label text="ユーザー管理システム">
                     <font>
-                        <Font name="System Bold" size="16.0" />
+                        <Font name="System Bold" size="16.0"/>
                     </font>
                 </Label>
                 <HBox spacing="10.0">
                     <children>
-                        <TextField fx:id="m_search_text" promptText="ユーザー名を検索..." HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="m_search_text" promptText="ユーザー名を検索..." HBox.hgrow="ALWAYS"/>
                     </children>
                 </HBox>
                 <HBox spacing="10.0">
                     <children>
-                        <TextField fx:id="m_input_text" promptText="新規ユーザー名を入力" HBox.hgrow="ALWAYS" />
-                        <ComboBox fx:id="m_dept_combo_box" prefWidth="120.0" promptText="部署を選択" />
-                        <Button fx:id="m_register_button" mnemonicParsing="false" onAction="#onRegisterButtonClick" disable="true" text="登録" />
+                        <TextField fx:id="m_input_text" promptText="新規ユーザー名を入力" HBox.hgrow="ALWAYS"/>
+                        <ComboBox fx:id="m_dept_combo_box" prefWidth="120.0" promptText="部署を選択"/>
+                        <ComboBox fx:id="m_role_combo_box" prefWidth="100.0" promptText="権限"/>
+                        <Button fx:id="m_register_button" mnemonicParsing="false" onAction="#onRegisterButtonClick"
+                                disable="true" text="登録"/>
                     </children>
                 </HBox>
-                <ListView fx:id="m_user_list_view" VBox.vgrow="ALWAYS" />
+                <ListView fx:id="m_user_list_view" VBox.vgrow="ALWAYS"/>
             </children>
         </VBox>
 
-        <VBox prefWidth="220.0" spacing="15.0" style="-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;">
+        <VBox prefWidth="220.0" spacing="15.0"
+              style="-fx-background-color: #f4f4f4; -fx-border-color: #cccccc; -fx-border-radius: 5; -fx-background-radius: 5;">
             <padding>
-                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
             </padding>
             <children>
                 <Label text="選択中のユーザー詳細">
                     <font>
-                        <Font name="System Bold" size="13.0" />
+                        <Font name="System Bold" size="13.0"/>
                     </font>
                 </Label>
                 <VBox spacing="5.0" VBox.vgrow="ALWAYS">
                     <children>
-                        <Label text="ユーザー名：" textFill="#666666" />
+                        <Label text="ユーザー名：" textFill="#666666"/>
                         <Label fx:id="m_selected_name_label" text="選択されていません" wrapText="true">
                             <font>
-                                <Font size="14.0" />
+                                <Font size="14.0"/>
                             </font>
                         </Label>
                     </children>
                 </VBox>
-                <Button fx:id="m_delete_button" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onDeleteButtonClick" disable="true" style="-fx-background-color: #ff4d4d; -fx-text-fill: white;" text="このユーザーを削除" />
+                <Button fx:id="m_delete_button" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                        onAction="#onDeleteButtonClick" disable="true"
+                        style="-fx-background-color: #ff4d4d; -fx-text-fill: white;" text="このユーザーを削除"/>
             </children>
         </VBox>
     </children>

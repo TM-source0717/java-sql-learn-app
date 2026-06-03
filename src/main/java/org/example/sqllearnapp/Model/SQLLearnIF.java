@@ -23,8 +23,8 @@ public class SQLLearnIF {
     /**
      * データ追加
      */
-    public void insertUser(String name, String department_name) {
-        this.m_sql_controller.insertUser(name, department_name);
+    public void insertUser(String name, String department_name, String role) {
+        this.m_sql_controller.insertUser(name, department_name, role);
         return;
     }
 
@@ -38,15 +38,15 @@ public class SQLLearnIF {
     /**
      * 検索機能
      */
-    public List<String> searchItem(String name, String department_name) {
+    public List<UserRecord> searchItem(String name, String department_name) {
         return this.m_sql_controller.searchItem(name, department_name);
     }
 
     /**
      * データ取得
      */
-    public List<String> getUserBySearchDepartmentId(String department_name) {
-        return this.m_sql_controller.getUserBySearchDepartmentId(department_name);
+    public List<UserRecord> getUsersByDepartment(String department_name) {
+        return this.m_sql_controller.getUsersByDepartment(department_name);
     }
 
     /**
@@ -54,5 +54,9 @@ public class SQLLearnIF {
      */
     public List<String> getAllDepartments() {
         return this.m_sql_controller.getAllDepartments();
+    }
+
+    public List<UserRecord> getAllUsersWithDetails() {
+        return this.m_sql_controller.getAllUsersWithDetails();
     }
 }
